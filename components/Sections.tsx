@@ -268,9 +268,7 @@ const CHECKS = [
 ];
 export function Legalitas() {
   return (
-    <section id="legalitas" className="stage-deep on-deep relative overflow-hidden pb-10 pt-16 sm:pb-14 sm:pt-24 blend" style={{ "--blend-top": "#5C0810", "--blend-bottom": "#5C0810" } as React.CSSProperties}>
-      <div aria-hidden className="wave-top"><svg viewBox="0 0 1440 70" preserveAspectRatio="none" className="h-10 w-full sm:h-16"><path d="M0 0 H1440 V18 C 1080 72, 360 72, 0 18 Z" fill="#F8CDD3" /></svg></div>
-      <div aria-hidden className="wave-bottom"><svg viewBox="0 0 1440 70" preserveAspectRatio="none" className="h-10 w-full sm:h-16"><path d="M0 0 H1440 V18 C 1080 72, 360 72, 0 18 Z" fill="#FFF8F2" /></svg></div>
+    <section id="legalitas" className="stage-deep on-deep relative overflow-hidden pb-10 pt-16 sm:pb-14 sm:pt-24">
       <div aria-hidden className="deco pat-star inset-0 [mask-image:radial-gradient(75%_65%_at_50%_35%,#000,transparent)]" />
       <div className="shell relative grid items-center gap-10 lg:grid-cols-[.95fr_1.05fr]">
         <div data-fx>
