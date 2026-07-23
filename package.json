@@ -9,7 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "vercel-build": "next build"
+    "vercel-build": "node scripts/verify-root.mjs && next build"
   },
   "dependencies": {
     "lucide-react": "^0.428.0",
