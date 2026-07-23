@@ -53,14 +53,14 @@ export default function Simulator() {
   };
 
   return (
-    <section id="simulasi" className="blend relative overflow-hidden bg-[linear-gradient(180deg,#FFF8F2_0%,#FDE3E6_50%,#F6C9CE_100%)] pb-16 pt-8 sm:pb-24 sm:pt-12" style={{ "--blend-top": "#FFF8F2", "--blend-bottom": "#F6C9CE" } as React.CSSProperties}>
+    <section id="simulasi" className="blend relative overflow-hidden bg-[linear-gradient(180deg,#FFF8F2_0%,#FDE3E6_50%,#F6C9CE_100%)] pb-16 pt-10 sm:pb-24 sm:pt-14" style={{ "--blend-top": "#FFF8F2", "--blend-bottom": "#F6C9CE" } as React.CSSProperties}>
       <div aria-hidden className="tint-blob -left-28 top-6 h-80 w-80 bg-rose/25" />
       <div aria-hidden className="tint-blob -right-24 bottom-10 h-72 w-72 bg-gold/20" />
       <div aria-hidden className="deco pat-dots inset-y-0 right-0 w-1/3 [mask-image:linear-gradient(90deg,transparent,#000_60%)]" />
       <div className="shell relative">
         <p className="kicker">Simulasi Pembayaran</p>
-        <h2 data-fx className="h-display mt-3 max-w-2xl text-3xl sm:text-4xl">Hitung cicilan porsi Haji Khusus Anda</h2>
-        <p className="mt-3 max-w-2xl text-[15px] text-ink-2">
+        <h2 data-fx className="h-display mt-3 max-w-2xl text-[28px] sm:text-4xl">Hitung cicilan porsi Haji Khusus Anda</h2>
+        <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-2 sm:text-[15px]">
           Coba pilih tenor yang sesuai dengan rencana keuangan Anda. Rumus: <strong className="text-ink">cicilan = (USD {SISA_DP_USD.toLocaleString("en-US")} × kurs) ÷ tenor</strong>.
         </p>
 

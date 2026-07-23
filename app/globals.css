@@ -201,7 +201,7 @@ a, button, input, select { -webkit-tap-highlight-color: transparent; }
 }
 .blend::before { top: -1px; background: linear-gradient(180deg, var(--blend-top, transparent), transparent); }
 .blend::after { bottom: -1px; background: linear-gradient(0deg, var(--blend-bottom, transparent), transparent); }
-.blend > * { position: relative; z-index: 2; }
+.blend > *:not(.deco):not(.tint-blob):not(.wave-top):not(.wave-bottom) { position: relative; z-index: 2; }
 @media (max-width: 640px) { .blend::before, .blend::after { height: 64px; } }
 
 /* Kurva sayap Diva sebagai transisi ke/dari panggung gelap */
