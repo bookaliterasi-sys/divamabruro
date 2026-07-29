@@ -83,7 +83,6 @@ export function track(
         eventSourceUrl: window.location.href,
         fbp: getCookie("_fbp"),
         fbc: getCookie("_fbc"),
-        testEventCode: "TEST33445",
       }),
     });
   } catch {
