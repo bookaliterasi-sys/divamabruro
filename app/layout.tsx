@@ -51,7 +51,7 @@ const orgLd = {
   slogan: "Haji Ala Sultan Gak Harus Mahal",
   url: SITE_URL,
   logo: `${SITE_URL}/brand/diva-t.png`,
-  telephone: `+${(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6289671922111").replace(/\D/g, "")}`,
+  telephone: `+${(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6285705588888").replace(/\D/g, "")}`,
   sameAs: ["https://instagram.com/divaumrohhaji"],
   address: {
     "@type": "PostalAddress",

@@ -28,3 +28,7 @@ Hero Haji Khusus (H1 + CTA tampil tanpa menunggu JS) · Simulator porsi (kurs + 
 
 ## Catatan verifikasi data
 Harga program (USD 13.400–15.400), hotel, maskapai, alamat kantor, dan estimasi antrean berasal dari materi lama — mohon dikonfirmasi ulang oleh tim Diva sebelum kampanye besar.
+
+## Update Step 4 — Problem to Possibility
+
+Section problem-to-possibility kini ditempatkan setelah Trust Statement untuk mengubah kekhawatiran calon jamaah menjadi langkah yang lebih jelas, dilengkapi CTA konsultasi dan simulator. Detail perubahan tersedia di `STEP_4_PROBLEM_TO_POSSIBILITY.md`.

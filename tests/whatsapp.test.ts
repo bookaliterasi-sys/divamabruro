@@ -20,10 +20,31 @@ describe("pesan WhatsApp Diva Mabruro", () => {
     expect(msg).toContain("cmp:haji");
   });
 
-  it("pesan umum menyebut Diva Mabruro dan asal CTA", () => {
-    const msg = buildGeneralMessage("sticky_mobile");
-    expect(msg).toContain("Diva Mabruro");
-    expect(msg).toContain("sticky_mobile");
-    expect(msg.toLowerCase()).not.toContain("thaibah");
+  it("pesan umum berbeda per CTA tanpa label internal", () => {
+    const header = buildGeneralMessage("header");
+    const faq = buildGeneralMessage("faq");
+    expect(header).toContain("Diva Mabruro");
+    expect(faq).toContain("beberapa pertanyaan");
+    expect(header).not.toBe(faq);
+    expect(header.toLowerCase()).not.toContain("asal:");
+    expect(faq.toLowerCase()).not.toContain("asal:");
+    expect(header.toLowerCase()).not.toContain("header");
   });
+
+  it("pesan problem-to-possibility bersifat konsultatif tanpa label lokasi CTA", () => {
+    const msg = buildGeneralMessage("problem_possibility");
+    expect(msg).toContain("proses porsi");
+    expect(msg).toContain("keamanan pembayaran");
+    expect(msg.toLowerCase()).not.toContain("asal:");
+    expect(msg.toLowerCase()).not.toContain("problem_possibility");
+  });
+  it("pesan perjalanan porsi menjelaskan enam tahap tanpa label internal", () => {
+    const msg = buildGeneralMessage("journey");
+    expect(msg).toContain("setoran awal USD 1.000");
+    expect(msg).toContain("persyaratan dokumen");
+    expect(msg).toContain("pendampingan keberangkatan");
+    expect(msg.toLowerCase()).not.toContain("asal:");
+    expect(msg.toLowerCase()).not.toContain("journey");
+  });
+
 });

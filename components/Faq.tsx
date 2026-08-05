@@ -1,46 +1,150 @@
 "use client";
-/** FAQ — jawaban ringkas di awal, accordion ringan, ramah keyboard. */
+
 import { useState } from "react";
-import { ChevronDown, MessageCircle } from "lucide-react";
+import {
+  ChevronDown,
+  CircleDollarSign,
+  FileText,
+  MessageCircle,
+  PlaneTakeoff,
+  Route,
+  ShieldCheck,
+  WalletCards,
+} from "lucide-react";
 import WaLink from "@/components/WaLink";
 import { buildGeneralMessage } from "@/lib/whatsapp";
-import { FAQS } from "@/lib/faq";
+import { FAQ_GROUPS, FAQS, type FaqCategoryId } from "@/lib/faq";
 import { track } from "@/lib/analytics";
 
-export default function Faq() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section id="faq" className="blend relative overflow-hidden bg-[linear-gradient(180deg,#F6C9CE_0%,#FDE3E6_45%,#FFF4EC_100%)] py-16 sm:py-24" style={{ "--blend-top": "#F6C9CE", "--blend-bottom": "#FFF4EC" } as React.CSSProperties}>
-      <span aria-hidden className="deco -right-4 top-6 select-none font-display text-[9rem] font-bold leading-none text-red/[0.05]">FAQ</span>
-      <div className="shell grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
-        <div>
-          <p className="kicker">Pertanyaan Umum</p>
-          <h2 data-fx className="h-display mt-3 text-3xl sm:text-4xl">Ragu itu wajar. Tanyakan saja.</h2>
-          <p className="mt-4 max-w-md text-[15px] leading-relaxed text-ink-2">
-            Ini pertanyaan yang paling sering masuk sebelum orang memutuskan. Jika belum terjawab,
-            konsultan kami menjawab langsung.
-          </p>
-          <WaLink message={buildGeneralMessage("faq")} data={{ placement: "faq" }} className="btn btn-outline mt-6">
-            <MessageCircle size={16} aria-hidden /> Bicara dengan Konsultan Diva
-          </WaLink>
-        </div>
+const CATEGORY_ICONS = {
+  "skema-porsi": Route,
+  pembayaran: WalletCards,
+  dokumen: FileText,
+  keberangkatan: PlaneTakeoff,
+  keamanan: ShieldCheck,
+  konsultasi: MessageCircle,
+} satisfies Record<FaqCategoryId, typeof Route>;
 
-        <div className="space-y-3">
-          {FAQS.map((f, i) => {
-            const on = open === i;
+function FaqCta({ type }: { type: "porsi" | "keamanan" }) {
+  const security = type === "keamanan";
+
+  return (
+    <aside className="faq-editorial__cta" aria-label={security ? "Konsultasi keamanan pembayaran" : "Konsultasi skema porsi"}>
+      <div className="faq-editorial__cta-icon" aria-hidden>
+        {security ? <ShieldCheck size={21} /> : <CircleDollarSign size={21} />}
+      </div>
+      <div>
+        <p className="faq-editorial__cta-label">{security ? "Sebelum melakukan pembayaran" : "Masih menghitung skema yang sesuai?"}</p>
+        <h3>{security ? "Verifikasi informasi penting langsung dengan konsultan." : "Minta penjelasan berdasarkan rencana keuangan Anda."}</h3>
+      </div>
+      <WaLink
+        message={buildGeneralMessage(security ? "faq_keamanan" : "faq_porsi")}
+        event="faq_whatsapp_click"
+        data={{ topic: type }}
+        className="btn btn-red faq-editorial__cta-button"
+      >
+        <MessageCircle size={16} aria-hidden /> {security ? "Verifikasi via WhatsApp" : "Tanya Skema Porsi"}
+      </WaLink>
+    </aside>
+  );
+}
+
+export default function Faq() {
+  const [open, setOpen] = useState<string | null>(FAQS[0]?.id ?? null);
+
+  return (
+    <section id="faq" className="faq-editorial" aria-labelledby="faq-heading">
+      <div aria-hidden className="faq-editorial__glow faq-editorial__glow--one" />
+      <div aria-hidden className="faq-editorial__glow faq-editorial__glow--two" />
+
+      <div className="shell faq-editorial__shell">
+        <header className="faq-editorial__header">
+          <div>
+            <p className="kicker">Pertanyaan Umum</p>
+            <h2 id="faq-heading">Temukan jawaban berdasarkan tahap yang sedang Anda pertimbangkan.</h2>
+          </div>
+          <div className="faq-editorial__header-copy">
+            <p>
+              Pertanyaan dikelompokkan agar skema porsi, pembayaran, dokumen, keberangkatan, keamanan, dan konsultasi
+              dapat diperiksa tanpa membaca informasi yang bercampur.
+            </p>
+            <WaLink
+              message={buildGeneralMessage("faq_konsultasi")}
+              event="faq_whatsapp_click"
+              data={{ topic: "general" }}
+              className="faq-editorial__header-link"
+            >
+              Pertanyaan belum tercantum? Konsultasikan <span aria-hidden>→</span>
+            </WaLink>
+          </div>
+        </header>
+
+        <nav className="faq-editorial__nav no-scrollbar" aria-label="Kategori FAQ">
+          {FAQ_GROUPS.map((group, index) => {
+            const Icon = CATEGORY_ICONS[group.id];
             return (
-              <div key={f.q} className={`card overflow-hidden !rounded-2xl transition-colors ${on ? "border-red/50" : ""}`}>
-                <button
-                  className="flex min-h-[56px] w-full items-center justify-between gap-4 px-5 py-4 text-left"
-                  aria-expanded={on}
-                  onClick={() => { setOpen(on ? null : i); if (!on) track("faq_opened", { q: f.q }); }}
-                >
-                  <span className={`text-[15px] font-bold ${on ? "text-red" : "text-ink"}`}>{f.q}</span>
-                  <ChevronDown size={18} aria-hidden className={`shrink-0 text-red transition-transform duration-300 ${on ? "rotate-180" : ""}`} />
-                </button>
-                <div className="faq-panel" data-open={on}>
-                  <div><p className="px-5 pb-5 text-sm leading-relaxed text-ink-2">{f.a}</p></div>
-                </div>
+              <a key={group.id} href={`#faq-${group.id}`}>
+                <span aria-hidden>{String(index + 1).padStart(2, "0")}</span>
+                <Icon size={15} aria-hidden />
+                {group.label}
+              </a>
+            );
+          })}
+        </nav>
+
+        <div className="faq-editorial__groups">
+          {FAQ_GROUPS.map((group, groupIndex) => {
+            const Icon = CATEGORY_ICONS[group.id];
+            return (
+              <div key={group.id}>
+                <section id={`faq-${group.id}`} className="faq-editorial__group" aria-labelledby={`faq-${group.id}-heading`}>
+                  <div className="faq-editorial__group-heading">
+                    <span className="faq-editorial__group-number" aria-hidden>{String(groupIndex + 1).padStart(2, "0")}</span>
+                    <div className="faq-editorial__group-icon" aria-hidden><Icon size={20} /></div>
+                    <div>
+                      <h3 id={`faq-${group.id}-heading`}>{group.label}</h3>
+                      <p>{group.intro}</p>
+                    </div>
+                  </div>
+
+                  <div className="faq-editorial__questions">
+                    {group.items.map((item) => {
+                      const isOpen = open === item.id;
+                      const panelId = `faq-panel-${item.id}`;
+                      const buttonId = `faq-button-${item.id}`;
+
+                      return (
+                        <article key={item.id} className="faq-editorial__item" data-open={isOpen}>
+                          <button
+                            id={buttonId}
+                            type="button"
+                            aria-expanded={isOpen}
+                            aria-controls={panelId}
+                            onClick={() => {
+                              setOpen(isOpen ? null : item.id);
+                              if (!isOpen) track("faq_opened", { id: item.id, category: group.id, question: item.q });
+                            }}
+                          >
+                            <span>{item.q}</span>
+                            <ChevronDown size={19} aria-hidden />
+                          </button>
+                          <div
+                            id={panelId}
+                            role="region"
+                            aria-labelledby={buttonId}
+                            className="faq-panel"
+                            data-open={isOpen}
+                          >
+                            <div><p>{item.a}</p></div>
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {group.id === "skema-porsi" ? <FaqCta type="porsi" /> : null}
+                {group.id === "keamanan" ? <FaqCta type="keamanan" /> : null}
               </div>
             );
           })}

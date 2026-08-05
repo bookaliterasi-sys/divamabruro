@@ -1,232 +1,469 @@
 /** Section server-rendered Diva Mabruro — nol JavaScript klien. */
 import Image from "next/image";
-import { BadgeCheck, PiggyBank, ShieldCheck, Handshake, Armchair, FileCheck2, GraduationCap, PlaneTakeoff, HeartHandshake, Users, Home, Instagram, MapPin, Phone } from "lucide-react";
+import { BadgeCheck, ShieldCheck, FileCheck2, GraduationCap, HeartHandshake, Users, Home, Instagram, MapPin, Phone, WalletCards, Route, SlidersHorizontal, ShieldQuestion, HandHeart, ArrowDownRight, PlaneTakeoff, Building2, CalendarDays, BedDouble, Landmark, MessageCircle, ClipboardCheck, UserRoundCheck } from "lucide-react";
 import WaLink from "@/components/WaLink";
-import DivaEmblem from "@/components/DivaEmblem";
 import AgeCalculator from "@/components/AgeCalculator";
-import PosterCarousel from "@/components/PosterCarousel";
 import TrackLink from "@/components/TrackLink";
 import { buildGeneralMessage } from "@/lib/whatsapp";
 import { HAJI_PKG } from "@/lib/packages";
 import { WA_DISPLAY } from "@/lib/wa";
 
-/* ---------- TRUST STRIP (marquee ringan) ---------- */
+/* ---------- TRUST STATEMENT — editorial proof row ---------- */
 const TRUST_ITEMS = [
-  { t: "PPIU No. 25/2019 & 874/2020", d: "Terdaftar Kemenag RI" },
-  { t: "Provider PIHK aktif", d: "Penyelenggara Haji Khusus" },
-  { t: "Kantor Sidoarjo & Surabaya", d: "Dapat dikunjungi langsung" },
-  { t: "Rekening atas nama PT", d: "Bukan rekening pribadi" },
-  { t: "Dokumentasi jamaah nyata", d: "Manasik & keberangkatan" },
-  { t: "Pendampingan penuh", d: "Konsultasi hingga pulang" },
+  {
+    icon: ShieldCheck,
+    t: "Pembayaran resmi",
+    d: "Pembayaran diarahkan melalui rekening resmi perusahaan, bukan rekening pribadi.",
+  },
+  {
+    icon: HeartHandshake,
+    t: "Pendampingan menyeluruh",
+    d: "Dibantu sejak konsultasi, administrasi, persiapan, hingga keberangkatan.",
+  },
+  {
+    icon: FileCheck2,
+    t: "Skema transparan",
+    d: "Setoran awal, sisa DP, pilihan tenor, dan tahapannya dijelaskan sebelum keputusan.",
+  },
+  {
+    icon: Home,
+    t: "Kantor dapat dikunjungi",
+    d: "Calon jamaah dapat bertemu tim dan melakukan verifikasi secara langsung.",
+  },
+  {
+    icon: Users,
+    t: "Dokumentasi jamaah nyata",
+    d: "Materi manasik dan perjalanan menggunakan dokumentasi jamaah yang tersedia.",
+  },
+  {
+    icon: BadgeCheck,
+    t: "Informasi legalitas",
+    d: "Dokumen dan informasi legalitas dapat diperiksa serta dikonfirmasi kepada tim.",
+  },
 ];
+
 export function TrustStrip() {
   return (
-    <div className="stage-blush py-6">
-      <div className="trust-mask" aria-label="Bukti kepercayaan Diva Mabruro">
-        <div className="trust-track">
-          {[0, 1].map((copy) => (
-            <div key={copy} aria-hidden={copy === 1} className="flex shrink-0 items-stretch gap-3 pr-3">
-              {TRUST_ITEMS.map((i) => (
-                <span key={i.t + copy} className="flex w-[248px] shrink-0 items-start gap-2.5 rounded-2xl border border-red/15 bg-white/90 px-4 py-3 shadow-card">
-                  <BadgeCheck size={17} aria-hidden className="mt-0.5 shrink-0 text-red" />
-                  <span>
-                    <span className="block text-[13.5px] font-bold leading-snug text-ink">{i.t}</span>
-                    <span className="block text-[12px] text-ink-2">{i.d}</span>
-                  </span>
-                </span>
-              ))}
-            </div>
-          ))}
+    <section className="trust-editorial" aria-labelledby="trust-heading">
+      <div className="shell trust-editorial__shell">
+        <div data-fx className="trust-editorial__intro">
+          <p className="trust-editorial__eyebrow">Bukti kepercayaan</p>
+          <h2 id="trust-heading">Hal penting yang dapat Anda periksa sebelum memutuskan.</h2>
         </div>
+
+        <div data-fx className="trust-editorial__viewport" style={{ "--d": ".07s" } as React.CSSProperties}>
+          <div className="trust-editorial__row" role="list">
+            {TRUST_ITEMS.map(({ icon: Icon, t, d }, index) => (
+              <article className="trust-editorial__item" role="listitem" key={t}>
+                <div className="trust-editorial__number" aria-hidden>
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <Icon className="trust-editorial__icon" size={20} strokeWidth={1.8} aria-hidden />
+                <h3>{t}</h3>
+                <p>{d}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <p className="trust-editorial__note">
+          Seluruh detail dapat dikonfirmasi terlebih dahulu sebelum Anda melakukan pembayaran.
+        </p>
       </div>
-    </div>
+    </section>
   );
 }
 
-/* ---------- SKEMA DP + KEUNGGULAN (gabungan) ---------- */
-const STEPS = [
-  { t: "Konsultasi gratis", d: "Diskusikan rencana Anda — untuk diri sendiri atau orang tua — tanpa kewajiban mendaftar." },
-  { t: "Setoran awal USD 1.000", d: "Proses dimulai dengan setoran awal ke rekening resmi perusahaan." },
-  { t: "Cicil sisa DP USD 4.000", d: "Pilih tenor 12–60 bulan. Simulasi kurs Rp18.000/USD: mulai sekitar Rp1,2 juta per bulan." },
-  { t: "Porsi diproses", d: "Setelah syarat dan DP terpenuhi sesuai ketentuan resmi, porsi Anda diproses dan didampingi hingga berangkat." },
+
+/* ---------- PROBLEM TO POSSIBILITY — narasi empatik dan faktual ---------- */
+const POSSIBILITY_ITEMS = [
+  {
+    icon: WalletCards,
+    concern: "Mengira Haji Khusus harus dibayar sekaligus.",
+    possibility: "Mulai dengan memahami setoran awal, sisa DP, dan pilihan tenor sebelum menentukan keputusan.",
+  },
+  {
+    icon: Route,
+    concern: "Belum memahami proses mendapatkan porsi.",
+    possibility: "Setiap tahap dapat dijelaskan berurutan, dari konsultasi dan persyaratan hingga proses porsi sesuai ketentuan.",
+  },
+  {
+    icon: SlidersHorizontal,
+    concern: "Bingung menentukan skema cicilan.",
+    possibility: "Gunakan simulasi untuk membandingkan tenor dan estimasi setoran yang paling masuk akal bagi kondisi keluarga.",
+  },
+  {
+    icon: ShieldQuestion,
+    concern: "Khawatir terhadap keamanan pembayaran.",
+    possibility: "Periksa rekening resmi, dokumen, legalitas, serta alur pembayaran sebelum melakukan transfer.",
+  },
+  {
+    icon: HandHeart,
+    concern: "Ingin memberangkatkan orang tua dengan nyaman.",
+    possibility: "Rencanakan kebutuhan pendampingan sejak awal agar layanan dapat disesuaikan dengan kondisi jamaah.",
+  },
 ];
-const PILLARS = [
-  { icon: PiggyBank, t: "Dana lebih terarah", d: "Setoran awal, sisa DP, tenor, dan perkiraan cicilan dijelaskan terbuka." },
-  { icon: ShieldCheck, t: "Amanah", d: "Didampingi sejak konsultasi, dokumen, manasik, hingga perjalanan ibadah." },
-  { icon: Handshake, t: "Koordinasi efisien", d: "Pengaturan perjalanan yang rapi agar layanan sepadan dengan biayanya." },
-  { icon: Armchair, t: "Kenyamanan jamaah", d: "Dirancang agar Anda dan orang tua fokus beribadah, termasuk jamaah lansia." },
-];
-export function Skema() {
+
+export function ProblemPossibility() {
   return (
-    <section id="skema" className="stage-deep on-deep relative overflow-hidden py-16 sm:py-24 blend" style={{ "--blend-top": "#5C0810", "--blend-bottom": "#5C0810" } as React.CSSProperties}>
-      <div aria-hidden className="wave-top"><svg viewBox="0 0 1440 70" preserveAspectRatio="none" className="h-10 w-full sm:h-16"><path d="M0 0 H1440 V18 C 1080 72, 360 72, 0 18 Z" fill="#F6C9CE" /></svg></div>
-      <div aria-hidden className="wave-bottom"><svg viewBox="0 0 1440 70" preserveAspectRatio="none" className="h-10 w-full sm:h-16"><path d="M0 0 H1440 V18 C 1080 72, 360 72, 0 18 Z" fill="#FFF8F2" /></svg></div>
-      <div aria-hidden className="deco pat-grid inset-y-0 left-0 w-2/5 [mask-image:linear-gradient(270deg,transparent,#000_60%)]" />
-      <div className="shell relative">
-        <div data-fx className="max-w-2xl">
-          <p className="kicker">Skema Porsi Haji Khusus</p>
-          <h2 className="h-display mt-3 text-3xl sm:text-4xl">
-            “Haji Ala Sultan <span className="text-gold-light">Gak Harus Mahal</span>”
+    <section id="rencana" className="problem-possibility" aria-labelledby="possibility-heading">
+      <div aria-hidden className="problem-possibility__orb problem-possibility__orb--one" />
+      <div aria-hidden className="problem-possibility__orb problem-possibility__orb--two" />
+
+      <div className="shell problem-possibility__layout">
+        <div data-fx className="problem-possibility__intro">
+          <p className="problem-possibility__eyebrow">Dari ragu menjadi lebih jelas</p>
+          <h2 id="possibility-heading">
+            Rencana besar tidak harus dimulai dengan keputusan yang terburu-buru.
           </h2>
-          <span aria-hidden className="rule-gold mt-4 block" />
-          <p className="mt-4 text-[16px] leading-relaxed text-white/80">
-            Kenyamanan Haji Khusus dapat direncanakan lewat skema setoran yang terarah dan transparan —
-            dimulai dari <strong className="text-white">USD 1.000</strong>.
+          <p className="problem-possibility__lead">
+            Banyak keluarga menunda karena prosesnya terlihat rumit. Langkah pertama yang lebih tenang adalah
+            memahami skema, memeriksa informasinya, lalu menyesuaikannya dengan kesiapan Anda.
+          </p>
+          <div className="problem-possibility__intro-line" aria-hidden />
+          <p className="problem-possibility__note">
+            Diva Mabruro membantu menjelaskan pilihan secara bertahap. Keputusan tetap berada di tangan Anda.
           </p>
         </div>
 
-        <ol data-fx className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4" style={{ "--d": ".06s" } as React.CSSProperties}>
-          {STEPS.map((c, i) => (
-            <li key={c.t} className="card card-accent relative overflow-hidden p-6 pl-7">
-              <span aria-hidden className="pointer-events-none absolute -right-2 -top-6 select-none font-display text-[6rem] font-bold text-white/10">{i + 1}</span>
-              <p className="relative text-[16px] font-bold text-white">{c.t}</p>
-              <p className="relative mt-2 text-sm leading-relaxed text-white/70">{c.d}</p>
-            </li>
-          ))}
-        </ol>
-
-        <div data-fx className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" style={{ "--d": ".1s" } as React.CSSProperties}>
-          {PILLARS.map(({ icon: Icon, t, d }) => (
-            <div key={t} className="flex gap-3.5 rounded-2xl border border-white/15 bg-white/[0.06] p-5 transition-colors hover:border-gold/40">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-gold-light"><Icon size={20} aria-hidden /></span>
-              <div>
-                <h3 className="text-[15px] font-bold text-white">{t}</h3>
-                <p className="mt-1 text-[13px] leading-relaxed text-white/70">{d}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div data-fx className="mt-8" style={{ "--d": ".14s" } as React.CSSProperties}>
-          <TrackLink href="#simulasi" event="hero_cta_click" data={{ placement: "skema" }} className="btn btn-white">
-            Hitung Cicilan Porsi Saya <span className="arr" aria-hidden>→</span>
-          </TrackLink>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- PROGRAM HAJI ---------- */
-export function Program() {
-  const p = HAJI_PKG;
-  return (
-    <section id="program" className="stage-cream relative overflow-hidden py-16 sm:py-24 blend" style={{ "--blend-top": "#FFF8F2", "--blend-bottom": "#FDE7EA" } as React.CSSProperties}>
-      <div aria-hidden className="deco pat-star inset-0 [mask-image:radial-gradient(80%_70%_at_50%_30%,#000,transparent)]" />
-      <div className="shell">
-        <p className="kicker">Program Haji Khusus Diva</p>
-        <h2 data-fx className="h-display mt-3 max-w-2xl text-3xl sm:text-4xl">Program yang tersedia saat ini</h2>
-
-        <div data-fx className="card mt-10 overflow-hidden lg:grid lg:grid-cols-[1.1fr_.9fr]">
-          <div className="p-6 sm:p-8">
-            <span className="badge-red">1 · Biaya perjalanan</span>
-            <h3 className="mt-3 font-display text-2xl font-bold text-ink sm:text-3xl">{p.name}</h3>
-            <p className="mt-1 text-sm font-semibold text-ink-2">Maskapai: {p.airline}</p>
-
-            <p className="mt-5 text-[12px] font-bold uppercase tracking-[0.18em] text-ink-2">Hotel</p>
-            <ul className="mt-2 space-y-2">
-              {p.hotels.map((h) => (
-                <li key={h.name} className="flex items-center justify-between rounded-xl bg-off px-4 py-2.5 text-sm">
-                  <span className="font-bold text-ink">{h.name}</span>
-                  <span className="text-ink-2">{h.city} · {"★".repeat(h.stars)}</span>
-                </li>
-              ))}
-            </ul>
-
-            <ul className="mt-4 space-y-1.5">
-              {p.notes.map((n) => (
-                <li key={n} className="flex items-start gap-2 text-sm text-ink-2">
-                  <BadgeCheck size={16} aria-hidden className="mt-0.5 shrink-0 text-red" /> {n}
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-5 grid grid-cols-3 overflow-hidden rounded-2xl border border-line text-center">
-              {[["Quad", p.priceQuad], ["Triple", p.priceTriple], ["Double", p.priceDouble]].map(([l, v], i) => (
-                <div key={l as string} className={`px-2 py-3 ${i > 0 ? "border-l border-line" : ""}`}>
-                  <p className="text-[11px] font-bold uppercase tracking-wide text-ink-2">{l}</p>
-                  <p className="mt-0.5 text-[15px] font-extrabold text-red">USD {(v as number).toLocaleString("en-US")}</p>
+        <div className="problem-possibility__content">
+          <div className="problem-possibility__list" role="list">
+            {POSSIBILITY_ITEMS.map(({ icon: Icon, concern, possibility }, index) => (
+              <article
+                data-fx
+                className="problem-possibility__item"
+                role="listitem"
+                key={concern}
+                style={{ "--d": `${index * 0.055}s` } as React.CSSProperties}
+              >
+                <div className="problem-possibility__index" aria-hidden>
+                  {String(index + 1).padStart(2, "0")}
                 </div>
-              ))}
-            </div>
-            <p className="mt-2 text-[12px] text-ink-2">Biaya program per orang. Detail jadwal & ketersediaan: konfirmasi dengan konsultan.</p>
-          </div>
-
-          <div className="flex flex-col justify-between gap-5 border-t border-line bg-[linear-gradient(160deg,#FDEEF0,#FFF4EC)] p-6 sm:p-8 lg:border-l lg:border-t-0">
-            <div>
-              <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-red">2 · DP porsi (proses nomor porsi)</p>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink">
-                Angka ini <strong>berbeda</strong> dari biaya perjalanan di samping. DP porsi hanya untuk memproses nomor porsi Anda:
-              </p>
-              <ul className="mt-3 space-y-2 text-[15px] font-bold text-ink">
-                <li className="flex justify-between rounded-xl bg-white px-4 py-2.5"><span>Total DP</span><span className="text-red">USD 5.000</span></li>
-                <li className="flex justify-between rounded-xl bg-white px-4 py-2.5"><span>Setoran awal</span><span className="text-red">USD 1.000</span></li>
-                <li className="flex justify-between rounded-xl bg-white px-4 py-2.5"><span>Sisa DP (dicicil)</span><span className="text-red">USD 4.000</span></li>
-              </ul>
-              <p className="mt-3 text-[12px] leading-relaxed text-ink-2">
-                Yang dicicil adalah sisa DP porsi — bukan seluruh biaya perjalanan. Porsi diproses setelah syarat & DP terpenuhi sesuai ketentuan resmi.
-              </p>
-            </div>
-            <WaLink message={buildGeneralMessage("program_haji")} event="haji_package_whatsapp_click" data={{ id: p.id }} className="btn btn-red w-full">
-              Konsultasi Haji Khusus Gratis
-            </WaLink>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- PENDAMPINGAN + ORANG TUA (gabungan) ---------- */
-const CARE = [
-  { icon: FileCheck2, t: "Pendampingan dokumen", d: "Paspor, visa, dan persyaratan diurus bersama tim." },
-  { icon: GraduationCap, t: "Manasik terjadwal", d: "Materi & praktik sebelum berangkat, terdokumentasi." },
-  { icon: PlaneTakeoff, t: "Handling keberangkatan", d: "Didampingi sejak bandara hingga tiba kembali." },
-  { icon: HeartHandshake, t: "Muthawif di Tanah Suci", d: "Tim menyertai seluruh rangkaian ibadah Anda." },
-  { icon: Users, t: "Ramah lansia & keluarga", d: "Kebutuhan khusus diperhatikan sejak konsultasi." },
-  { icon: Home, t: "Purna perjalanan", d: "Komunikasi tidak berhenti saat Anda pulang." },
-];
-export function Pendampingan() {
-  return (
-    <section id="fasilitas" className="stage-blush relative overflow-hidden py-16 sm:py-24 blend" style={{ "--blend-top": "#FFF4EC", "--blend-bottom": "#F8CDD3" } as React.CSSProperties}>
-      <svg aria-hidden viewBox="0 0 120 120" fill="none" className="deco -left-10 -top-10 h-64 w-64 text-red/[0.07]">
-        <path d="M14 98 C 8 46, 44 12, 102 9" stroke="currentColor" strokeWidth="7" strokeLinecap="round" />
-        <path d="M32 108 C 26 60, 60 26, 112 22" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-      </svg>
-      <div className="shell relative grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
-        <div>
-          <div data-fx>
-            <p className="kicker">Pendampingan Jamaah</p>
-            <h2 className="h-display mt-3 text-3xl sm:text-4xl">
-              Perjalanan ibadah terbaik — <span className="grad-text">juga untuk orang tua Anda</span>
-            </h2>
-            <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-ink-2">
-              Kenyamanan bukan sekadar kemewahan. Bagi jamaah lanjut usia, fasilitas yang baik, pendampingan
-              yang sigap, dan perjalanan yang tertata membantu mereka beribadah dengan lebih tenang.
-            </p>
-          </div>
-          <div data-fx className="mt-7 grid gap-3 sm:grid-cols-2" style={{ "--d": ".08s" } as React.CSSProperties}>
-            {CARE.map(({ icon: Icon, t, d }) => (
-              <div key={t} className="flex gap-3.5 rounded-2xl border border-line bg-[linear-gradient(160deg,#FFFFFF,#FFFAF9)] p-4 transition-colors hover:border-red/35">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[linear-gradient(140deg,#FDEEF0,#FAD9DD)] text-red"><Icon size={18} aria-hidden /></span>
-                <div>
-                  <h3 className="text-[14.5px] font-bold text-ink">{t}</h3>
-                  <p className="mt-0.5 text-[13px] leading-relaxed text-ink-2">{d}</p>
+                <div className="problem-possibility__icon" aria-hidden>
+                  <Icon size={21} strokeWidth={1.75} />
                 </div>
-              </div>
+                <div className="problem-possibility__statement">
+                  <span>Yang sering dirasakan</span>
+                  <h3>{concern}</h3>
+                </div>
+                <ArrowDownRight className="problem-possibility__arrow" size={22} strokeWidth={1.55} aria-hidden />
+                <div className="problem-possibility__answer">
+                  <span>Langkah yang memungkinkan</span>
+                  <p>{possibility}</p>
+                </div>
+              </article>
             ))}
           </div>
-          <div data-fx className="mt-7" style={{ "--d": ".12s" } as React.CSSProperties}>
-            <WaLink message={buildGeneralMessage("pendampingan")} event="parent_consultation_click" data={{ placement: "pendampingan" }} className="btn btn-red">
-              Konsultasi Haji Khusus Gratis
-            </WaLink>
-            <p className="mt-3 text-[12px] text-ink-2">Gratis konsultasi awal, tanpa kewajiban mendaftar.</p>
+
+          <div data-fx className="problem-possibility__solution" style={{ "--d": ".12s" } as React.CSSProperties}>
+            <div>
+              <p className="problem-possibility__solution-label">Solusi Diva Mabruro</p>
+              <h3>Pahami rencananya lebih dahulu, baru tentukan langkah terbaik.</h3>
+              <p>
+                Konsultasikan kebutuhan, coba simulasi, dan verifikasi informasi penting tanpa kewajiban langsung mendaftar.
+              </p>
+            </div>
+            <div className="problem-possibility__actions">
+              <WaLink
+                message={buildGeneralMessage("problem_possibility")}
+                event="problem_possibility_whatsapp_click"
+                data={{ placement: "problem_possibility" }}
+                className="btn btn-red"
+              >
+                Bicarakan Rencana Saya <span className="arr" aria-hidden>→</span>
+              </WaLink>
+              <TrackLink
+                href="#simulasi"
+                event="problem_possibility_simulator_click"
+                data={{ placement: "problem_possibility_simulator" }}
+                className="btn btn-outline"
+              >
+                Coba Simulator
+              </TrackLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- PROGRAM HAJI KHUSUS — focused program showcase ---------- */
+export function Program() {
+  const p = HAJI_PKG;
+  const roomOptions = [
+    { label: "Quad", detail: "4 orang/kamar", value: p.priceQuad },
+    { label: "Triple", detail: "3 orang/kamar", value: p.priceTriple },
+    { label: "Double", detail: "2 orang/kamar", value: p.priceDouble },
+  ];
+
+  return (
+    <section id="program" className="haji-program" aria-labelledby="haji-program-heading">
+      <div aria-hidden className="haji-program__glow haji-program__glow--one" />
+      <div aria-hidden className="haji-program__glow haji-program__glow--two" />
+
+      <div className="shell haji-program__shell">
+        <header className="haji-program__intro">
+          <div data-fx>
+            <p className="kicker">Program Haji Khusus</p>
+            <h2 id="haji-program-heading">Satu program aktif, dijelaskan dalam satu pandangan yang jelas.</h2>
+          </div>
+          <p data-fx style={{ "--d": ".08s" } as React.CSSProperties}>
+            Informasi berikut menggunakan data program yang sudah tersedia di proyek. Nilai, jadwal, hotel, maskapai,
+            dan ketersediaan tetap perlu dikonfirmasi kembali kepada konsultan sebelum pendaftaran.
+          </p>
+        </header>
+
+        <article data-fx className="haji-program__showcase">
+          <div className="haji-program__hero">
+            <div className="haji-program__hero-copy">
+              <div className="haji-program__status-row">
+                <span className="haji-program__status"><span aria-hidden /> Paket tersedia untuk konsultasi</span>
+                <span className="haji-program__duration"><CalendarDays size={15} aria-hidden /> {p.durationDays} hari</span>
+              </div>
+
+              <p className="haji-program__overline">Diva Mabruro</p>
+              <h3>{p.name}</h3>
+              <div className="haji-program__airline">
+                <PlaneTakeoff size={19} aria-hidden />
+                <span><small>Maskapai tercantum</small><strong>{p.airline}</strong></span>
+              </div>
+            </div>
+
+            <div className="haji-program__route" aria-label="Ringkasan perjalanan program">
+              <span className="haji-program__route-line" aria-hidden />
+              <div><span>01</span><strong>Persiapan</strong><small>Konsultasi dan dokumen</small></div>
+              <div><span>02</span><strong>Perjalanan</strong><small>Program Non Arbain</small></div>
+              <div><span>03</span><strong>Kepulangan</strong><small>Pendampingan hingga selesai</small></div>
+            </div>
+          </div>
+
+          <div className="haji-program__content">
+            <div className="haji-program__details">
+              <section className="haji-program__block" aria-labelledby="program-accommodation-heading">
+                <div className="haji-program__block-heading">
+                  <Building2 size={19} aria-hidden />
+                  <div>
+                    <p>Akomodasi tercantum</p>
+                    <h4 id="program-accommodation-heading">Hotel dalam materi program</h4>
+                  </div>
+                </div>
+                <div className="haji-program__hotel-list">
+                  {p.hotels.map((hotel, index) => (
+                    <div key={`${hotel.name}-${hotel.city}`}>
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <div><strong>{hotel.name}</strong><small>{hotel.city}</small></div>
+                      <p>{hotel.stars} bintang</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section className="haji-program__block" aria-labelledby="program-notes-heading">
+                <div className="haji-program__block-heading">
+                  <BadgeCheck size={19} aria-hidden />
+                  <div>
+                    <p>Rangkaian utama</p>
+                    <h4 id="program-notes-heading">Catatan program yang tersedia</h4>
+                  </div>
+                </div>
+                <ul className="haji-program__notes">
+                  {p.notes.map((note) => (
+                    <li key={note}><BadgeCheck size={16} aria-hidden /> {note}</li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+
+            <aside className="haji-program__pricing" aria-label="Pilihan biaya dan skema pembayaran">
+              <div>
+                <p className="haji-program__pricing-label">Biaya perjalanan per orang</p>
+                <h4>Pilih kebutuhan kamar</h4>
+                <div className="haji-program__room-list">
+                  {roomOptions.map((room) => (
+                    <div key={room.label}>
+                      <BedDouble size={18} aria-hidden />
+                      <span><strong>{room.label}</strong><small>{room.detail}</small></span>
+                      <p>USD {room.value.toLocaleString("en-US")}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="haji-program__price-note">
+                  Biaya perjalanan bukan cicilan sisa DP porsi. Nilai dan ketersediaan kamar wajib dikonfirmasi kembali.
+                </p>
+              </div>
+
+              <div className="haji-program__payment">
+                <p>Skema awal porsi</p>
+                <dl>
+                  <div><dt>Total DP porsi</dt><dd>USD 5.000</dd></div>
+                  <div><dt>Setoran awal</dt><dd>USD 1.000</dd></div>
+                  <div><dt>Sisa DP</dt><dd>USD 4.000</dd></div>
+                </dl>
+                <small>
+                  Sisa DP dapat disimulasikan berdasarkan pilihan tenor. Proses porsi mengikuti pemenuhan persyaratan dan ketentuan resmi.
+                </small>
+              </div>
+            </aside>
+          </div>
+
+          <footer className="haji-program__footer">
+            <div>
+              <p>Perlu memeriksa kecocokan program?</p>
+              <h4>Tanyakan jadwal, pilihan kamar, biaya, dan skema pembayarannya langsung kepada konsultan.</h4>
+            </div>
+            <div className="haji-program__actions">
+              <WaLink
+                message={buildGeneralMessage("program_haji")}
+                event="haji_package_whatsapp_click"
+                data={{ id: p.id, program: p.name }}
+                className="btn btn-white"
+              >
+                Konsultasi Program via WhatsApp <span className="arr" aria-hidden>→</span>
+              </WaLink>
+              <TrackLink href="#simulasi" event="journey_simulator_click" data={{ placement: "program" }} className="haji-program__simulator-link">
+                Buka kembali simulator
+              </TrackLink>
+            </div>
+          </footer>
+        </article>
+
+        <p className="haji-program__disclaimer">
+          Informasi program pada halaman ini bukan bukti pemesanan. Jadwal, maskapai, hotel, pilihan kamar, biaya,
+          dan layanan mengikuti ketersediaan serta konfirmasi resmi dari Diva Mabruro.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- VALUE & SERVICE EXPERIENCE — editorial journey ---------- */
+const SERVICE_EXPERIENCE = [
+  {
+    phase: "Sebelum perjalanan",
+    icon: Route,
+    title: "Perencanaan lebih terarah",
+    description: "Kebutuhan jamaah, kesiapan keluarga, pilihan program, dan langkah berikutnya dibahas sejak awal agar keputusan tidak terasa terburu-buru.",
+  },
+  {
+    phase: "Sebelum perjalanan",
+    icon: WalletCards,
+    title: "Informasi skema yang transparan",
+    description: "Setoran awal, sisa DP, tenor, biaya program, serta batas antara simulasi dan nilai resmi dijelaskan dengan bahasa yang mudah dipahami.",
+  },
+  {
+    phase: "Sebelum perjalanan",
+    icon: FileCheck2,
+    title: "Pendampingan dokumen",
+    description: "Tim membantu mengarahkan persiapan paspor, dokumen administrasi, dan persyaratan lain sesuai tahap yang sedang dijalani jamaah.",
+  },
+  {
+    phase: "Menjelang keberangkatan",
+    icon: GraduationCap,
+    title: "Manasik dan persiapan",
+    description: "Jamaah dibantu memahami rangkaian ibadah, kebutuhan perjalanan, serta hal praktis yang perlu dipersiapkan sebelum berangkat.",
+  },
+  {
+    phase: "Selama perjalanan",
+    icon: Users,
+    title: "Kenyamanan jamaah dan orang tua",
+    description: "Kondisi usia, kebutuhan pendampingan, ritme perjalanan, dan kenyamanan keluarga menjadi bagian penting dalam perencanaan layanan.",
+  },
+  {
+    phase: "Setiap tahap",
+    icon: Phone,
+    title: "Konsultasi yang mudah",
+    description: "Pertanyaan dapat disampaikan melalui WhatsApp sehingga jamaah dan keluarga mempunyai jalur komunikasi yang jelas saat membutuhkan penjelasan.",
+  },
+  {
+    phase: "Sebelum, selama, dan setelah",
+    icon: HeartHandshake,
+    title: "Pendampingan yang tidak berhenti di keberangkatan",
+    description: "Diva Mabruro menjaga kesinambungan komunikasi sejak perencanaan, selama rangkaian perjalanan, hingga jamaah kembali kepada keluarga.",
+  },
+];
+
+export function Pendampingan() {
+  return (
+    <section id="fasilitas" className="service-experience" aria-labelledby="service-experience-heading">
+      <div aria-hidden className="service-experience__halo service-experience__halo--left" />
+      <div aria-hidden className="service-experience__halo service-experience__halo--right" />
+
+      <div className="shell service-experience__shell">
+        <header className="service-experience__header">
+          <div data-fx>
+            <p className="kicker">Value &amp; Service Experience</p>
+            <h2 id="service-experience-heading" className="service-experience__title">
+              Bukan hanya berangkat. Setiap tahap perlu terasa lebih terarah dan terjaga.
+            </h2>
+          </div>
+          <div data-fx className="service-experience__header-copy" style={{ "--d": ".08s" } as React.CSSProperties}>
+            <p>
+              Diva Mabruro menyatukan perencanaan, informasi, dokumen, persiapan ibadah, dan komunikasi keluarga
+              dalam satu alur pendampingan yang mudah diikuti.
+            </p>
+            <p className="service-experience__microcopy">
+              Detail layanan tetap menyesuaikan program, kondisi jamaah, dan ketentuan yang berlaku.
+            </p>
+          </div>
+        </header>
+
+        <div className="service-experience__body">
+          <aside data-fx className="service-experience__aside">
+            <p className="service-experience__aside-label">Satu perjalanan, tiga fase</p>
+            <ol className="service-experience__phases" aria-label="Fase pendampingan Diva Mabruro">
+              <li><span>01</span><strong>Sebelum</strong><small>Rencana, skema, dan dokumen.</small></li>
+              <li><span>02</span><strong>Selama</strong><small>Ibadah, kenyamanan, dan komunikasi.</small></li>
+              <li><span>03</span><strong>Setelah</strong><small>Kepulangan dan kelanjutan komunikasi.</small></li>
+            </ol>
+            <div className="service-experience__aside-rule" aria-hidden />
+            <p className="service-experience__aside-quote">
+              “Jamaah tidak hanya membutuhkan informasi. Mereka membutuhkan alur yang jelas dan orang yang dapat dihubungi.”
+            </p>
+          </aside>
+
+          <div className="service-experience__list" role="list">
+            {SERVICE_EXPERIENCE.map(({ phase, icon: Icon, title, description }, index) => (
+              <article
+                key={title}
+                data-fx
+                role="listitem"
+                className="service-experience__item"
+                style={{ "--d": `${Math.min(index * 0.045, 0.24)}s` } as React.CSSProperties}
+              >
+                <div className="service-experience__number" aria-hidden>
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div className="service-experience__icon" aria-hidden>
+                  <Icon size={21} strokeWidth={1.7} />
+                </div>
+                <div className="service-experience__content">
+                  <p className="service-experience__phase">{phase}</p>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </div>
+                <ArrowDownRight className="service-experience__arrow" size={22} strokeWidth={1.5} aria-hidden />
+              </article>
+            ))}
           </div>
         </div>
 
-        <div data-fx className="relative mx-auto w-full max-w-[240px] sm:max-w-[340px]" style={{ "--d": ".1s" } as React.CSSProperties}>
-          <div aria-hidden className="absolute -bottom-4 -left-4 h-full w-full rounded-t-[2rem] rounded-b-[7rem] bg-red-soft" />
-          <div className="relative"><DivaEmblem /><span className="badge-red absolute left-4 top-4 z-10">Bersama Diva</span></div>
+        <div data-fx className="service-experience__closing" style={{ "--d": ".12s" } as React.CSSProperties}>
+          <div>
+            <p className="service-experience__closing-label">Mulai dari kebutuhan Anda</p>
+            <h3>Ceritakan siapa yang ingin berangkat dan bentuk pendampingan yang dibutuhkan.</h3>
+          </div>
+          <div className="service-experience__closing-action">
+            <WaLink
+              message={buildGeneralMessage("pendampingan")}
+              event="parent_consultation_click"
+              data={{ placement: "service_experience" }}
+              className="btn btn-red"
+            >
+              Konsultasikan Kebutuhan Jamaah <span className="arr" aria-hidden>→</span>
+            </WaLink>
+            <p>Konsultasi awal gratis dan tidak mengikat.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -259,96 +496,137 @@ export function QueueCompare() {
   );
 }
 
-/* ---------- LEGALITAS & CHECKLIST AMANAH ---------- */
-const CHECKS = [
-  "Minta bukti legalitas tertulis beserta nomor izin resmi.",
-  "Pastikan porsi didaftarkan mengikuti mekanisme resmi Kementerian Haji.",
-  "Minta simulasi biaya, skema setoran, dan jadwal secara tertulis.",
-  "Pastikan pembayaran hanya ke rekening atas nama perusahaan (PT).",
+/* ---------- LEGALITAS & KEAMANAN — pusat verifikasi ---------- */
+const SECURITY_POINTS = [
+  {
+    icon: FileCheck2,
+    label: "Legalitas",
+    title: "Dokumen dapat diminta sebelum mendaftar",
+    description:
+      "Minta dokumen legalitas dan informasi penyelenggara kepada tim Diva Mabruro, lalu cocokkan kembali sebelum mengambil keputusan.",
+  },
+  {
+    icon: Landmark,
+    label: "Rekening resmi",
+    title: "Pastikan nama penerima adalah perusahaan",
+    description:
+      "Instruksi pembayaran diarahkan ke rekening resmi atas nama PT Diva Mabruro, bukan rekening pribadi. Verifikasi kembali nama rekening sebelum transfer.",
+  },
+  {
+    icon: Building2,
+    label: "Kantor",
+    title: "Verifikasi dapat dilakukan secara langsung",
+    description:
+      "Kantor yang tercantum dalam proyek berada di Juanda Business Center, Sidoarjo, serta Jl. Ahmad Yani No. 151, Surabaya.",
+  },
+  {
+    icon: MessageCircle,
+    label: "Kontak resmi",
+    title: `Satu nomor konsultasi: ${WA_DISPLAY}`,
+    description:
+      "Gunakan nomor WhatsApp yang tercantum di website untuk meminta dokumen, rincian skema, dan konfirmasi sebelum pembayaran.",
+  },
+  {
+    icon: ClipboardCheck,
+    label: "Proses pembayaran",
+    title: "Pahami skema dan simpan rincian tertulis",
+    description:
+      "Pastikan nilai setoran, tujuan pembayaran, tahapan porsi, dan ketentuan program sudah dijelaskan sebelum transaksi dilakukan.",
+  },
+  {
+    icon: UserRoundCheck,
+    label: "Pendampingan",
+    title: "Tetap didampingi setelah administrasi dimulai",
+    description:
+      "Pendampingan mencakup konsultasi, dokumen, manasik, persiapan, perjalanan ibadah, hingga kepulangan sesuai layanan yang dikonfirmasi.",
+  },
 ];
+
+const VERIFY_STEPS = [
+  "Minta dan periksa dokumen legalitas yang relevan.",
+  "Cocokkan nama rekening dengan nama perusahaan.",
+  "Minta skema pembayaran dan ketentuan secara tertulis.",
+  "Simpan bukti komunikasi serta bukti pembayaran.",
+];
+
 export function Legalitas() {
   return (
-    <section id="legalitas" className="stage-deep on-deep relative overflow-hidden pb-10 pt-16 sm:pb-14 sm:pt-24">
-      <div aria-hidden className="deco pat-star inset-0 [mask-image:radial-gradient(75%_65%_at_50%_35%,#000,transparent)]" />
-      <div className="shell relative grid items-center gap-10 lg:grid-cols-[.95fr_1.05fr]">
-        <div data-fx>
-          <p className="kicker">Pastikan Travel Resmi</p>
-          <h2 className="h-display mt-3 text-3xl sm:text-4xl">Pilih yang <span className="text-gold-light">resmi</span> — jangan hanya tergiur cepat.</h2>
-          <span aria-hidden className="rule-gold mt-4 block" />
-          <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-white/80">
-            Diva Mabruro terdaftar resmi di Kementerian Agama RI sebagai penyelenggara perjalanan ibadah,
-            dan tercatat aktif sebagai provider Penyelenggara Ibadah Haji Khusus.
+    <section id="legalitas" className="legal-security" aria-labelledby="legal-security-heading">
+      <div aria-hidden className="legal-security__halo legal-security__halo--one" />
+      <div aria-hidden className="legal-security__halo legal-security__halo--two" />
+
+      <div className="shell legal-security__shell">
+        <header data-fx className="legal-security__header">
+          <div>
+            <p className="legal-security__eyebrow">Legalitas dan keamanan</p>
+            <h2 id="legal-security-heading">Kepercayaan dibangun dari hal yang dapat Anda periksa.</h2>
+          </div>
+          <p>
+            Sebelum mendaftar atau melakukan pembayaran, verifikasi dokumen, rekening, kantor, dan kontak resmi.
+            Tim Diva Mabruro dapat membantu menjelaskan setiap tahap tanpa perlu mengambil keputusan terburu-buru.
           </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {[
-              { t: "Izin PPIU", n: "No. 25 Tahun 2019", d: "Penyelenggara Perjalanan Ibadah Umrah — Kementerian Agama RI." },
-              { t: "Provider PIHK", n: "No. 874 Tahun 2020", d: "Tercatat aktif sebagai provider Penyelenggara Ibadah Haji Khusus." },
-            ].map((c) => (
-              <div key={c.n} className="rounded-2xl border border-white/15 bg-white/[0.07] p-5">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-gold-light"><ShieldCheck size={19} aria-hidden /></span>
-                <p className="chip-gold mt-3">{c.t}</p>
-                <p className="font-display text-xl font-bold text-white">{c.n}</p>
-                <p className="mt-1.5 text-[12.5px] leading-relaxed text-white/70">{c.d}</p>
-              </div>
+        </header>
+
+        <div className="legal-security__layout">
+          <div className="legal-security__ledger" role="list">
+            {SECURITY_POINTS.map(({ icon: Icon, label, title, description }, index) => (
+              <article
+                data-fx
+                className="legal-security__row"
+                role="listitem"
+                key={label}
+                style={{ "--d": `${index * 0.045}s` } as React.CSSProperties}
+              >
+                <span className="legal-security__number" aria-hidden>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="legal-security__icon" aria-hidden>
+                  <Icon size={20} strokeWidth={1.75} />
+                </span>
+                <div className="legal-security__copy">
+                  <p>{label}</p>
+                  <h3>{title}</h3>
+                </div>
+                <p className="legal-security__description">{description}</p>
+              </article>
             ))}
           </div>
+
+          <aside data-fx className="legal-security__verify" style={{ "--d": ".12s" } as React.CSSProperties}>
+            <div className="legal-security__verify-mark" aria-hidden>
+              <ShieldCheck size={26} strokeWidth={1.65} />
+            </div>
+            <p className="legal-security__verify-label">Sebelum melanjutkan</p>
+            <h3>Lakukan empat pemeriksaan sederhana.</h3>
+            <ol>
+              {VERIFY_STEPS.map((step, index) => (
+                <li key={step}>
+                  <span aria-hidden>{index + 1}</span>
+                  <p>{step}</p>
+                </li>
+              ))}
+            </ol>
+
+            <div className="legal-security__contact">
+              <p>Kontak resmi</p>
+              <strong>{WA_DISPLAY}</strong>
+              <span>Konsultasi awal gratis dan tidak mengikat.</span>
+            </div>
+
+            <WaLink
+              message={buildGeneralMessage("legalitas")}
+              event="legal_whatsapp_click"
+              data={{ placement: "legal_security" }}
+              className="btn btn-white w-full"
+            >
+              Verifikasi dan Konsultasi Sekarang
+            </WaLink>
+          </aside>
         </div>
 
-        <div data-fx className="rounded-[28px] border border-white/15 bg-white/[0.07] p-6 sm:p-8" style={{ "--d": ".1s" } as React.CSSProperties}>
-          <h3 className="font-display text-2xl font-bold text-white">Sebelum Anda transfer, pastikan:</h3>
-          <ul className="mt-5 space-y-3">
-            {CHECKS.map((c) => (
-              <li key={c} className="flex items-start gap-3 rounded-2xl bg-white/[0.06] p-4">
-                <BadgeCheck size={18} aria-hidden className="mt-0.5 shrink-0 text-gold-light" />
-                <span className="text-[14.5px] leading-relaxed text-white/90">{c}</span>
-              </li>
-            ))}
-          </ul>
-          <WaLink message={buildGeneralMessage("legalitas")} data={{ placement: "legalitas" }} className="btn btn-white mt-6 w-full">
-            Minta Bukti Legalitas
-          </WaLink>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- EDUKASI: SLIDE POSTER RESMI DIVA ---------- */
-export function Edukasi() {
-  return (
-    <section id="edukasi" className="stage-wine relative overflow-hidden py-16 sm:py-24 blend" style={{ "--blend-top": "#FDEEF0", "--blend-bottom": "#E9A3AC" } as React.CSSProperties}>
-      <div className="shell relative">
-        <div data-fx className="max-w-2xl">
-          <p className="kicker">Pahami Dulu, Baru Putuskan</p>
-          <h2 className="h-display mt-3 text-3xl sm:text-4xl">Bertahan di Haji Reguler, atau <span className="text-red-deep">beralih ke Haji Plus?</span></h2>
-          <span aria-hidden className="rule-gold mt-4 block" />
-          <p className="mt-4 text-[16px] leading-relaxed text-ink-2">
-            Bukan soal siapa yang lebih baik — tapi mana yang paling sesuai rencana Anda.
-            Tarik atau geser kartu berikut untuk memahami perbedaannya.
-          </p>
-        </div>
-      </div>
-      <div data-fx className="relative mt-9 lg:shell" style={{ "--d": ".08s" } as React.CSSProperties}>
-        <PosterCarousel />
-      </div>
-
-      <div data-fx className="shell relative mt-12" style={{ "--d": ".12s" } as React.CSSProperties}>
-        <details className="group overflow-hidden rounded-[26px] border border-line bg-white">
-          <summary className="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-[15px] font-bold text-ink">
-            Lihat rute perjalanan ibadah haji bersama Diva (12 tahapan)
-            <span aria-hidden className="text-red transition-transform duration-300 group-open:rotate-180">▾</span>
-          </summary>
-        <div className="border-t border-line">
-          <Image
-            src="/poster/rute.webp"
-            alt="Infografis 12 tahapan rute perjalanan ibadah haji bersama Diva: Bandara Jeddah, Madinah, Makkah, Umrah Wajib, Mina, Arafah, Muzdalifah, Tawaf Ifadhah, lempar jumrah, Tawaf Wada, kembali ke tanah air"
-            width={1280}
-            height={720}
-            sizes="(max-width: 1024px) 92vw, 1100px"
-            className="h-auto w-full"
-          />
-        </div>
-        </details>
+        <p data-fx className="legal-security__note">
+          Informasi di bagian ini memakai data yang sudah tercantum dalam proyek. Detail dokumen, rekening, dan ketentuan terbaru tetap perlu dikonfirmasi langsung kepada tim Diva Mabruro.
+        </p>
       </div>
     </section>
   );
@@ -399,83 +677,188 @@ export function Proses() {
   );
 }
 
-/* ---------- CTA PENUTUP ---------- */
+/* ---------- STEP 14 — FINAL CONVERSION SCENE ---------- */
 export function FinalCta() {
   return (
-    <section id="konsultasi" className="relative overflow-hidden bg-[radial-gradient(125%_110%_at_50%_-5%,#E01E2D_0%,#C41220_28%,#7E0B13_62%,#41060C_100%)] text-white">
-      <div aria-hidden className="wave-top"><svg viewBox="0 0 1440 70" preserveAspectRatio="none" className="h-10 w-full sm:h-16"><path d="M0 0 H1440 V18 C 1080 72, 360 72, 0 18 Z" fill="#FFF4EC" /></svg></div>
-      <span aria-hidden className="watermark pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none whitespace-nowrap font-display text-[24vw] font-bold leading-none sm:text-[15rem]">
-        HAJI PLUS
-      </span>
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-red-deep/30 via-transparent to-black/25" />
-      <div data-fx className="shell relative py-28 text-center sm:py-36">
-        <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-white/75">Diva Mabruro, Mendampingi Ibadah dengan Nyaman dan Amanah</p>
-        <h2 className="h-display mx-auto mt-4 max-w-2xl text-3xl !text-white sm:text-5xl">Rencanakan Haji Khusus dengan Lebih Tenang</h2>
-        <p className="mx-auto mt-4 max-w-xl leading-relaxed text-white/85">
-          Mulai dari konsultasi, pahami skema pembayarannya, lalu pilih rencana yang paling sesuai untuk Anda dan keluarga.
-        </p>
-        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <WaLink message={buildGeneralMessage("cta_penutup")} data={{ placement: "final_cta" }} className="btn btn-white">
-            Konsultasi Haji Khusus Gratis
-          </WaLink>
-          <TrackLink href="#simulasi" event="hero_cta_click" data={{ placement: "final_cta" }} className="btn btn-ghost-white">
-            Hitung Simulasi Sekarang
-          </TrackLink>
+    <section id="konsultasi" className="final-conversion" aria-labelledby="final-conversion-heading">
+      <div aria-hidden className="final-conversion__glow final-conversion__glow--one" />
+      <div aria-hidden className="final-conversion__glow final-conversion__glow--two" />
+      <div aria-hidden className="final-conversion__line final-conversion__line--one" />
+      <div aria-hidden className="final-conversion__line final-conversion__line--two" />
+
+      <div className="shell final-conversion__shell">
+        <div data-fx className="final-conversion__copy">
+          <p className="final-conversion__eyebrow">Langkah berikutnya dimulai dari percakapan</p>
+          <h2 id="final-conversion-heading">
+            Rencana Haji Tidak Harus Dimulai dengan Menunggu Sempurna
+          </h2>
+          <p className="final-conversion__lead">
+            Mulai dengan konsultasi, pahami skemanya, lalu tentukan langkah terbaik bersama tim Diva Mabruro.
+          </p>
+
+          <div className="final-conversion__actions">
+            <WaLink
+              message={buildGeneralMessage("cta_penutup")}
+              event="final_whatsapp_click"
+              data={{ placement: "final_conversion" }}
+              className="btn btn-white final-conversion__button"
+            >
+              <MessageCircle size={18} aria-hidden /> Konsultasi Gratis via WhatsApp
+            </WaLink>
+            <p className="final-conversion__number">
+              <span>WhatsApp resmi</span>
+              <strong>{WA_DISPLAY}</strong>
+            </p>
+          </div>
+
+          <div className="final-conversion__assurance" aria-label="Informasi konsultasi">
+            <div>
+              <span>Respons konsultasi</span>
+              <p>Pesan Anda diteruskan kepada konsultan untuk dijawab secara personal.</p>
+            </div>
+            <div>
+              <span>Tanpa tekanan</span>
+              <p>Konsultasi awal gratis dan tidak mengikat Anda untuk langsung mendaftar.</p>
+            </div>
+          </div>
         </div>
-        <p className="mt-4 text-[12px] text-white/70">Gratis konsultasi awal, tanpa kewajiban mendaftar · Konsultan online 08.00–20.00 WIB</p>
+
+        <div
+          data-fx
+          data-slot="final-cta-visual"
+          className="final-conversion__visual"
+          style={{ "--d": ".12s" } as React.CSSProperties}
+          role="img"
+          aria-label="Slot visual final yang siap diisi dokumentasi resmi Diva Mabruro"
+        >
+          <div aria-hidden className="final-conversion__visual-frame">
+            <span className="final-conversion__visual-ring final-conversion__visual-ring--one" />
+            <span className="final-conversion__visual-ring final-conversion__visual-ring--two" />
+            <span className="final-conversion__visual-mark" />
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-/* ---------- FOOTER ---------- */
+/* ---------- STEP 15 — FOOTER RINGKAS & TERPERCAYA ---------- */
+const FOOTER_NAV = [
+  ["#skema", "Skema Porsi"],
+  ["#simulasi", "Simulator"],
+  ["#program", "Program Haji"],
+  ["#dokumentasi", "Dokumentasi"],
+  ["#pendampingan-jamaah", "Pendampingan"],
+  ["#faq", "FAQ"],
+] as const;
+
 export function Footer() {
   const year = new Date().getFullYear();
+
   return (
-    <footer className="border-t border-line bg-white">
-      <div className="shell pb-28 pt-12 md:pb-10">
-        <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <Image src="/brand/diva-t.png" alt="Logo Diva Mabruro" width={52} height={52} className="h-12 w-12 object-contain" />
-              <span className="flex flex-col leading-tight">
-                <span className="font-display text-xl font-bold text-ink">Diva Mabruro</span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-red">Umrah & Haji Plus</span>
+    <footer className="site-footer" aria-labelledby="footer-brand-name">
+      <div aria-hidden className="site-footer__glow site-footer__glow--one" />
+      <div aria-hidden className="site-footer__glow site-footer__glow--two" />
+
+      <div className="shell site-footer__shell">
+        <div className="site-footer__main">
+          <div className="site-footer__brand">
+            <a href="#hero" className="site-footer__identity" aria-label="Diva Mabruro — kembali ke bagian awal">
+              <span className="site-footer__logo">
+                <Image
+                  src="/brand/diva-t.png"
+                  alt="Logo Diva Mabruro"
+                  width={54}
+                  height={54}
+                  className="h-full w-full object-contain"
+                />
               </span>
-            </div>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-2">
-              Diva Mabruro, Mendampingi Ibadah dengan Nyaman dan Amanah. “Haji Ala Sultan Gak Harus Mahal.”
+              <span>
+                <strong id="footer-brand-name">Diva Mabruro</strong>
+                <small>Umrah &amp; Haji Plus</small>
+              </span>
+            </a>
+
+            <p className="site-footer__description">
+              Membantu keluarga memahami program Haji Khusus, menyiapkan dokumen, dan merencanakan perjalanan
+              melalui konsultasi yang lebih jelas dan bertahap.
             </p>
+
+            <div className="site-footer__social">
+              <a
+                href="https://instagram.com/divaumrohhaji"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Buka Instagram Diva Mabruro"
+              >
+                <Instagram size={17} aria-hidden /> @divaumrohhaji
+              </a>
+              <WaLink
+                message={buildGeneralMessage("footer")}
+                event="contact_clicked"
+                data={{ channel: "wa_footer", placement: "footer" }}
+                ariaLabel="Hubungi WhatsApp resmi Diva Mabruro"
+              >
+                <Phone size={17} aria-hidden /> {WA_DISPLAY}
+              </WaLink>
+            </div>
           </div>
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-2">Kantor</p>
-            <ul className="mt-3 space-y-3 text-sm text-ink-2">
-              <li className="flex gap-2.5"><MapPin size={16} aria-hidden className="mt-0.5 shrink-0 text-red" /> Juanda Business Center (JBC) Blok A8-9, Jl. Raya Bandara Juanda, Gedangan, Sidoarjo 61254</li>
-              <li className="flex gap-2.5"><MapPin size={16} aria-hidden className="mt-0.5 shrink-0 text-red" /> Jl. Ahmad Yani No. 151, Surabaya</li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-2">Terhubung</p>
-            <ul className="mt-3 space-y-3 text-sm">
-              <li>
-                <a href="https://instagram.com/divaumrohhaji" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-ink-2 transition-colors hover:text-red">
-                  <Instagram size={16} aria-hidden className="text-red" /> @divaumrohhaji
+
+          <nav className="site-footer__nav" aria-label="Navigasi footer">
+            <p className="site-footer__heading">Jelajahi</p>
+            <div>
+              {FOOTER_NAV.map(([href, label]) => (
+                <a key={href} href={href}>
+                  {label}
                 </a>
-              </li>
-              <li>
-                <WaLink message={buildGeneralMessage("footer")} event="contact_clicked" data={{ channel: "wa_footer" }} className="flex items-center gap-2.5 text-ink-2 transition-colors hover:text-red">
-                  <Phone size={16} aria-hidden className="text-red" /> {WA_DISPLAY}
-                </WaLink>
-              </li>
-            </ul>
+              ))}
+            </div>
+          </nav>
+
+          <div className="site-footer__office">
+            <p className="site-footer__heading">Kantor yang tersedia</p>
+            <address>
+              <p>
+                <MapPin size={17} aria-hidden />
+                <span>Juanda Business Center Blok A8–9, Jl. Raya Bandara Juanda, Gedangan, Sidoarjo 61254</span>
+              </p>
+              <p>
+                <MapPin size={17} aria-hidden />
+                <span>Jl. Ahmad Yani No. 151, Surabaya</span>
+              </p>
+            </address>
           </div>
         </div>
-        <div className="mt-10 space-y-2 border-t border-line pt-6 text-[12px] leading-relaxed text-ink-2">
-          <p>Seluruh pembayaran hanya ke rekening resmi atas nama PT Diva Mabruro — bukan rekening pribadi. Data yang Anda kirimkan melalui WhatsApp hanya digunakan untuk keperluan konsultasi.</p>
-          <p>Disclaimer: nilai Rp1,2 juta/bulan merupakan simulasi cicilan sisa DP USD 4.000 selama 60 bulan dengan asumsi kurs Rp18.000/USD; nilai aktual mengikuti kurs & ketentuan program.</p>
+
+        <div className="site-footer__verification">
+          <div className="site-footer__verification-icon" aria-hidden>
+            <ShieldCheck size={21} strokeWidth={1.7} />
+          </div>
+          <div>
+            <p>Legalitas dan keamanan</p>
+            <span>
+              Dokumen legalitas, rekening resmi, dan prosedur pembayaran dapat diminta serta dikonfirmasi kepada tim
+              sebelum transaksi.
+            </span>
+          </div>
+          <a href="#legalitas">Lihat cara verifikasi</a>
+        </div>
+
+        <div className="site-footer__bottom">
           <p>© {year} PT Diva Mabruro. Seluruh hak cipta dilindungi.</p>
+          <div className="site-footer__legal-copy">
+            <p>
+              <strong>Privasi:</strong> data yang dikirim melalui WhatsApp digunakan untuk kebutuhan konsultasi.
+            </p>
+            <p>
+              <strong>Disclaimer:</strong> simulasi bukan harga keseluruhan perjalanan. Nilai aktual mengikuti kurs,
+              ketersediaan, dan ketentuan yang dikonfirmasi konsultan.
+            </p>
+          </div>
+          <a href="#hero" className="site-footer__back-top">Kembali ke atas ↑</a>
         </div>
       </div>
     </footer>
   );
 }
+

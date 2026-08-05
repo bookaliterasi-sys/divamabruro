@@ -1,6 +1,6 @@
 /** Satu pintu WhatsApp Diva Mabruro — nomor dari env, fallback untuk development. */
-export const WA_FALLBACK = "6289671922111"; // 0896 7192 2111
-export const WA_DISPLAY = "0896 7192 2111";
+export const WA_FALLBACK = "6285705588888";
+export const WA_DISPLAY = "+62 857-0558-8888";
 
 export const waNumber = () => (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || WA_FALLBACK).replace(/\D/g, "");
 export const waLink = (msg: string) => `https://wa.me/${waNumber()}?text=${encodeURIComponent(msg)}`;

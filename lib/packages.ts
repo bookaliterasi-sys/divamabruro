@@ -2,7 +2,8 @@
 export const HAJI_PKG = {
   id: "diva-haji-plus",
   badge: "★ Haji Plus",
-  name: "Diva Haji Plus (Non Arbain) — 23 Hari",
+  name: "Diva Haji Plus (Non Arbain)",
+  durationDays: 23,
   airline: "Scoot / Etihad",
   curr: "USD" as const,
   priceQuad: 13400,
